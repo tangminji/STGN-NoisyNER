@@ -1,4 +1,9 @@
 # STGN experiment on NoisyNER
+
+Sub-experiment of ["STGN: an Implicit Regularization Method for Learning with Noisy Labels in Natural Language Processing"](https://aclanthology.org/2022.emnlp-main.515/) (EMNLP 2022) by Tingting Wu, Xiao Ding, Minji Tang, Hao Zhang, Bing Qin, Ting Liu.
+
+Main experiment: [github](https://github.com/tangminji/STGN-sst)
+
 ## Data: NoisyNER
 Data Source: ["Analysing the Noise Model Error for Realistic Noisy Label Data"](https://github.com/uds-lsv/noise-estimation) (AAAI 2021) by Hedderich, Zhu & Klakow
 
