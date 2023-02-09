@@ -1,4 +1,4 @@
-# STGN experiment on NoisyNER
+# STGN Experiment on NoisyNER
 
 Sub-experiment of ["STGN: an Implicit Regularization Method for Learning with Noisy Labels in Natural Language Processing"](https://aclanthology.org/2022.emnlp-main.515/) (EMNLP 2022) by Tingting Wu, Xiao Ding, Minji Tang, Hao Zhang, Bing Qin, Ting Liu.
 
