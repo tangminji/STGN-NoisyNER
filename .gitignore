@@ -159,6 +159,7 @@ tmp.py
 myrun.py
 *.json
 !/code/trainer_config/*
+!/code/exp_config/*
 code/data/CIFAR*/
 code/data/cifar*.py
 /data/*/*.conll
