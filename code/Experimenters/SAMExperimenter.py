@@ -27,7 +27,6 @@ class SAMExperimenter(Experimenter):
                 train_clean_for_mat, train_noisy_for_mat = \
                     self.get_train_subsets(n, self.train_clean_full, self.train_noisy_full)
 
-                # 由子集计算的噪声矩阵
                 # in this experiment, we provide the trainer the noise_mat estimated by different subsets
                 noise_mat = utils.compute_noise_matrix(train_clean_for_mat, train_noisy_for_mat,
                                                        self.label_representation)
@@ -43,7 +42,6 @@ class SAMExperimenter(Experimenter):
                         expected_se.expected_se_same_nis(n, self.true_noise_matrix)
 
 
-                # 这里好像有问题，并没有固定样本集??? 没有用到fixC
                 # however, the trainer will train on a fixed, small subsets
                 # overwrite sampled data
                 train_clean, train_noisy = self.get_train_subsets(n, self.train_clean_full,
@@ -72,7 +70,6 @@ class SAMExperimenter(Experimenter):
 
             self.update_and_save_hists(nt, mat_est_dict, f1_dict)  # save logs to disk
         
-        # self.f1_hist[num_times][n]记录了所有的f1值
         # self.log_f1()
 
 

@@ -9,7 +9,6 @@ def create_base_model(embedding_vector_size, hidden_size, dense1_out_size, dense
 
     return base_model, feature_extractor
 
-# 这里是一个LSTM+全连接层+激活函数+全连接层
 class BaseModel(nn.Module):
     def __init__(self, Feature_Extractor, hidden_size, dense1_out_size, dense_layer1_activation, num_labels):
         super(BaseModel, self).__init__()
@@ -41,16 +40,12 @@ class FeatureExtractor(nn.Module):
         feat = torch.cat((hn[0, ::], hn[1, ::]), dim=1)
         return feat
 
-# 在base_model的归一化概率上加入了噪声转移矩阵
 class Global_CM(nn.Module):
     def __init__(self, base_model, channel_weights, fix_transition, device):
         super(Global_CM, self).__init__()
         self.eps = 1e-7
         self.base_model = base_model
-        # 这里为什么一定要fix_trainsition?
         assert fix_transition
-        # 注意：这里直接传权重，不再训练
-        # fix_transition没有用到，是不是要和requires_grad绑定
         self.transition_mat = torch.tensor(channel_weights, requires_grad=False).float().to(device)
 
     def forward(self, x):

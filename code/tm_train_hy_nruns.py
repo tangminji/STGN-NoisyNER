@@ -24,7 +24,7 @@ import csv
 first = True
 counter = 0
 sig_max = args.sig_max
-delta = 0#判断是否满足增速
+delta = 0
 
 MD_CLASSES = {
     'NoisyNER':(get_noisyner_dataset, get_NoisyNER_model_and_loss_criterion)
@@ -123,13 +123,11 @@ def train_others(args, model, loader, optimizer, criterion, global_iter, epoch, 
         clip_grad_norm_(model.parameters(), max_norm=3, norm_type=2)
         optimizer.step()
 
-        args.sm = None # 这里清空一下，避免爆空间
-        # 这里评价记录了ACC
-        # 由于是碎片化比较，没有连续文章，所以无法记录F1
+        args.sm = None
         # Measure accuracy and record loss
         train_loss.update(loss.item(), data.size(0))
         
-        pred = output.argmax(dim=1) # 这里不要keepdim
+        pred = output.argmax(dim=1)
         # noise & disturbance ground-truth index
 
         target_gt = target_gt.to(args.device)
@@ -160,8 +158,6 @@ def train_others(args, model, loader, optimizer, criterion, global_iter, epoch, 
     log_value('train/false_correct_from_noise_disturb', fcorrect.avg, step=epoch)
     return global_iter, train_loss.avg, correct.avg, tcorrect.avg, fcorrect.avg
 
-# 注意：评价时要评价F1值
-# 这里算loss和acc时都用io标签，和训练时保持一致
 def validate(args, model, loader, criterion, epoch, logpath, raw_data, label_representation, mode='val'):
     '''
     Evaluates model on validation/test set and logs score on tensorboard.
@@ -176,9 +172,6 @@ def validate(args, model, loader, criterion, epoch, logpath, raw_data, label_rep
 
     test_loss.update(0,1)
     correct.update(0,1)
-
-    # 注意:f1计算用raw_data,而不是target
-    # acc虽然保留，但用于衡量NER任务不合适
 
     with torch.no_grad():
         for i, (data, target, word) in enumerate(loader):
@@ -229,7 +222,7 @@ def main(params):
         #others
         args.avg_steps = params['avg_steps']
         args.ratio_l = params['ratio_l']
-        args.noise_rate = params['noise_rate'] #这里应该由脚本指定
+        args.noise_rate = params['noise_rate']
         args.forget_times = params['forget_times']
     
     if 'SLN' in args.exp_name:
@@ -240,7 +233,6 @@ def main(params):
     args.logpath = os.path.join(args.exp_name, 'log.txt')
     args.log_dir = os.path.join(os.getcwd(), args.exp_name)
     
-    # 暂时注释，等会加回来
     generate_log_dir(args)
     #should be placed after generate_log_dir()
     log(args.logpath, 'Settings: {}\n'.format(args))
@@ -259,7 +251,6 @@ def main(params):
     #train_loader, test_loader, train_dataset, test_dataset, noisy_ind, clean_ind = loaders(args)
 
     #update perturb variance, dynamic sigma for each sample
-    #暂时未写入文件保存
     args.sigma_dyn = torch.tensor([args.sigma]*len(train_noisy),
                            dtype=torch.float32,
                            requires_grad=False,
@@ -311,7 +302,6 @@ def main(params):
             val_best = val_f1
             test_best = test_f1
             test_best_str = test_str
-            # TODO 调参的时候，没有保存模型，节省存储空间
             # utils.checkpoint(val_acc, epoch, model, args.save_dir)
 
         res_lst.append((train_acc, tc_acc, fc_acc, test_acc, test_f1, test_best, train_loss, test_loss))
@@ -346,7 +336,6 @@ def main(params):
 
 if __name__ == '__main__':
     print("load params from : ", args.params_path)
-    # TODO 之前的方式是载入 ['best']，这里更换是因为程序跑的总是提前停机，产生不了 best params 文件，所以手动选择要载入的参数选择文件
     params = json.load(open(args.params_path, 'r', encoding="utf-8"))['best']  if 'base' not in args.exp_name else {}
     assert params is not None
     main(params=params)

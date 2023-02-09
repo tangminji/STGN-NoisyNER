@@ -20,15 +20,11 @@ class SAExperimenter(Experimenter):
             for i, n in enumerate(self.ns):  # loop over different number of clean samples
                 train_clean, train_noisy = self.get_train_subsets(n, self.train_clean_full,
                                                                   self.train_noisy_full)
-                # 跟据采样到的训练样本计算噪声矩阵
                 noise_mat = utils.compute_noise_matrix(train_clean, train_noisy, self.label_representation)
 
-                # 理论误差计算
-                # 这里 len(train_noise_full)==num_labels吗? 待验证 
-                # print('train_noisy_full', len(self.train_noisy_full)) #139429
-                # 看样子写错了，返回概率偏大
-                # return
-                # 这会对Var Sampling有影响，对Fix Sampling无影响
+                # TODO does len(train_noise_full)==num_labels?
+                # may effect Var Sampling，no harm to Fix Sampling
+
                 # estimate theo. noise_matrix estimation error
                 if self.uniform_sampling:
                     probability_yis = theoretical_var_ni.estimate_probability_yis(self.train_clean_full,
@@ -62,5 +58,4 @@ class SAExperimenter(Experimenter):
 
             self.update_and_save_hists(nt, mat_est_dict, f1_dict)  # save logs to disk
 
-        # self.f1_hist[num_times][n]记录了所有的f1值
         # self.log_f1()

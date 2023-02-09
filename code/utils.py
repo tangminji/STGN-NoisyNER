@@ -29,7 +29,7 @@ def load_all_processed_data(args):
     remove_label_prefix = args.label_format == "io"
     input_dir = args.input_dir
     train_clean_path = os.path.join(input_dir, 'estner_true/train_clean.pickle')
-    if args.label_set == 0: # 使用干净数据集
+    if args.label_set == 0: # clean dataset
         train_noisy_path = train_clean_path
     else:
         train_noisy_path = os.path.join(input_dir, f'estner_noisy_round0{args.label_set}/train_noisy.pickle')
@@ -112,9 +112,9 @@ def sample_data_same_n_for_dataset(sample_size, train_clean_full, train_noisy_fu
         else:
             idx_dict[np.argmax(instance.label_emb)].append(idx)
 
-    for label_idx in range(num_labels): #每个类别采样sample_size个
+    for label_idx in range(num_labels): #sample sample_size per class
         sampled_indices.extend(sample_indices_one_row(sample_size, idx_dict, label_idx, random_state))
-    assert len(set(sampled_indices)) == len(sampled_indices) #确认无重复
+    assert len(set(sampled_indices)) == len(sampled_indices)
 
     sample_clean = [train_clean_full[i] for i in sampled_indices]
     sample_noisy = [train_noisy_full[i] for i in sampled_indices]
@@ -178,7 +178,7 @@ def _get_sample_indicies(num_items, num_samples, random_state, sequential):
             indicies.extend(numbers[:num_samples - (num_items - start_number)])
     else:
         indicies = random_state.randint(0, num_items - 1, num_samples)
-    assert len(indicies) == num_samples #总共采样了刚好num_samples个
+    assert len(indicies) == num_samples
     return set(indicies)
 
 
@@ -264,7 +264,7 @@ def test_epoch(model, dataloader, device):
         words.extend(word_batch)
         xs = xs.to(device)
         y_pred = model(xs)
-        predictions += torch.argmax(y_pred, dim=1).cpu().tolist() #预测的PER,LOC,ORG标签
+        predictions += torch.argmax(y_pred, dim=1).cpu().tolist()
 
     return predictions, words
 

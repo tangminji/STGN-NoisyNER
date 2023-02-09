@@ -188,7 +188,6 @@ class Experimenter():
         """
         raise NotImplementedError("Please Implement this method")
 
-    # # self.f1_hist[num_times][n]记录了所有的f1值
     # def log_f1(self):
     #     f1_all = {ns:0.0 for ns in self.ns}
     #     f = np.zeros((len(self.ns),self.num_times))
