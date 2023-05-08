@@ -4,6 +4,18 @@ Sub-experiment of ["STGN: an Implicit Regularization Method for Learning with No
 
 Main experiment: [github](https://github.com/tangminji/STGN-sst)
 
+Experiment on SST, NoisyNER and wikiHow:
+-  SST:
+   - [our code](https://github.com/tangminji/STGN-sst)
+
+-  NoisyNER: 
+   - [our code](https://github.com/tangminji/STGN-NoisyNER)
+   - [original work](https://github.com/uds-lsv/noise-estimation)
+
+- wikiHow: 
+  - [our code](https://github.com/tangminji/STGN-wikiHow) 
+  - [original work](https://github.com/zharry29/wikihow-goal-step)
+
 ## Data: NoisyNER
 Data Source: ["Analysing the Noise Model Error for Realistic Noisy Label Data"](https://github.com/uds-lsv/noise-estimation) (AAAI 2021) by Hedderich, Zhu & Klakow
 
